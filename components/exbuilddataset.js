@@ -228,11 +228,12 @@ function loadExamplesClasses(){
 
 function remove( obj ){
     let parent = obj.parentNode.id;
+    
     if( parent.indexOf('elements_class') == 0 ){
         let map = { 'b': 'bird', 'c': 'cat', 'd': 'dog', 'l': 'lion' };
-        let prefix = parent.split('_').slice(-1)[0][0];
-        eval( `contents_${ map[prefix] }` ).appendChild( obj );
-        obj.parentNode.removeChild( obj );
+        let prefix = obj.id.split('_').slice(-1)[0][0];
+        let classDiv = eval( `content_${ map[prefix] }` );
+        classDiv.appendChild( obj );
     }
 }
 
