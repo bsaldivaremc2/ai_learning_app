@@ -1,3 +1,8 @@
+/* 
+Adapted from https://github.com/pratikpc/tf-kmeans 
+Author: https://github.com/pratikpc
+*/
+
 class KMeans {
     k = 2;
     maxIter = 200;

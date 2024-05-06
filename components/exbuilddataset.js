@@ -73,6 +73,8 @@ class BuildDataset extends HTMLElement {
                                     
                                     <div class="col-md-3">
                                          <button type="button" class="btn btn-primary disab_ds" style="margin-top: 32px;" onClick="trainBuildDs()" > Train </button>
+                                         
+                                         <p id="notice_ds" class="mt-2" > </p>
                                     </div>
                                 </div>
                                 
@@ -286,6 +288,7 @@ async function trainBuildDs(){
     
     obj_ds.classes = [name_cl1, name_cl2];
     obj_ds.train_data = getTrainData( classes_info );
+    notice_ds.innerHTML = 'Transforming data ...';
     
     setTimeout( async function () {
         tf.engine().startScope();
@@ -294,9 +297,11 @@ async function trainBuildDs(){
         if( inModel == 'large' ){
             obj_ds.model = modProcess.getModelImage( obj_ds );
         }
+        notice_ds.innerHTML = 'Loading model ...';
         
         tfvis.visor().open();
-        
+                
+        notice_ds.innerHTML = 'Training ...';
         let fitted_model = await modProcess.train( obj_ds, obj_ds.model );
         await modViz.showAccuracy( obj_ds, obj_ds.model );
         await modViz.showConfusion( obj_ds, obj_ds.model );
@@ -304,6 +309,7 @@ async function trainBuildDs(){
         tf.engine().endScope();
         
         document.querySelectorAll('.disab_ds').forEach( e => e.disabled=false );
+        notice_ds.innerHTML = '';
     }, 2000);
 }
 
