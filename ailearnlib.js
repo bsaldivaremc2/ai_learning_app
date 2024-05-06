@@ -299,16 +299,17 @@ modProcess.filterData = function( obj ){
   let allx_test = [];
   let ally_test = [];
   for ( let k of Object.keys(x) ){
-    let length = obj.totalData ? ( x[k].length * (obj.totalData / 100) ) : obj.train_data.length;
+    let length = obj.totalData ? ( x[k].length * (obj.totalData / 100) ) : x[k].length;
     length = ( length * (obj.proportionsPerClass[k] / 100) );
     
     let TRAIN_DATA_SIZE = parseInt( length * (obj.train_size_perc / 100) );
     let TEST_DATA_SIZE = parseInt( length * (obj.test_size_perc / 100) );
     
-    allx_train += x[k].slice( 0, TRAIN_DATA_SIZE );
-    ally_train += y[k].slice( 0, TRAIN_DATA_SIZE );
-    allx_test += x[k].slice( TRAIN_DATA_SIZE, length );
-    ally_test += y[k].slice( TRAIN_DATA_SIZE, length ); 
+    allx_train = allx_train.concat( x[k].slice( 0, TRAIN_DATA_SIZE ).map( d => d.arraySync() ) );
+    ally_train = ally_train.concat( y[k].slice( 0, TRAIN_DATA_SIZE ) );
+    allx_test = allx_test.concat( x[k].slice( TRAIN_DATA_SIZE, length ).map( d => d.arraySync() ) );
+    ally_test = ally_test.concat( y[k].slice( TRAIN_DATA_SIZE, length ) ); 
+    
   }
   
   let data = { };
@@ -320,30 +321,35 @@ modProcess.filterData = function( obj ){
   return data;
 }
 
+modProcess.transformXdata = function ( obj, x, dims = null ) {
+  if(obj.idModel == 'custom' ){
+    let maxd = obj.maxDim;
+    x = x.resizeNearestNeighbor( [maxd, maxd] ).toFloat();
+  }
+  else{
+    x = x.reshape( dims );
+  }
+  
+  return x;
+}
+
 modProcess.treatData = function( obj ) {
   const img_dim = obj.maxDim;
   
-  /*
-  let data = { };
-  let length = obj.totalData ? ( obj.train_data.x.length * (obj.totalData / 100) ) : obj.train_data.length;
-  let TRAIN_DATA_SIZE = parseInt( length * (obj.train_size_perc / 100) );
-  let TEST_DATA_SIZE = parseInt( length * (obj.test_size_perc / 100) );
-  
-  data['x_train'] = tf.tensor( obj.train_data.x.slice( 0, TRAIN_DATA_SIZE ) );
-  data['y_train'] = tf.tensor( obj.train_data.y.slice( 0, TRAIN_DATA_SIZE ) );
-  data['x_test'] = tf.tensor( obj.train_data.x.slice( TRAIN_DATA_SIZE, length ) );
-  data['y_test'] = tf.tensor( obj.train_data.y.slice( TRAIN_DATA_SIZE, length ) );
-  */
   let data = modProcess.filterData( obj );
   data = modProcess.transformLabels( obj, data );
+  
   let TRAIN_DATA_SIZE = data.x_train.dataSync().length;
   let TEST_DATA_SIZE = data.x_test.dataSync().length;
+  
   let dims_train = [TRAIN_DATA_SIZE].concat( obj.dimension );
   let dims_test = [TEST_DATA_SIZE].concat( obj.dimension );
   
   const [trainXs, trainYs] = tf.tidy(() => {
     return [
-      data.x_train.reshape( dims_train ), //.resizeNearestNeighbor( [maxd, maxd] ).toFloat().expandDims()
+      modProcess.transformXdata( obj, data.x_train, dims_train),
+      //data.x_train.reshape( dims_train ),
+      //data.x_train.resizeNearestNeighbor( [maxd, maxd] ).toFloat(),
       data.y_train
     ];
   });
@@ -351,7 +357,9 @@ modProcess.treatData = function( obj ) {
 
   const [testXs, testYs] = tf.tidy(() => {
     return [
-      data.x_test.reshape( dims_test ),
+      modProcess.transformXdata( obj, data.x_test, dims_test),
+      //data.x_test.reshape( dims_test ),
+      //data.x_test.resizeNearestNeighbor( [maxd, maxd] ).toFloat(),
       data.y_test
     ];
   });
@@ -369,6 +377,7 @@ modProcess.train = async function(obj, model) {
   const BATCH_SIZE = obj.batch_size;
   
   let [trainXs, trainYs, testXs, testYs] = modProcess.treatData( obj );
+  console.log( trainXs, trainYs, testXs, testYs )
   
   return model.fit(trainXs, trainYs, {
     batchSize: BATCH_SIZE,
@@ -397,7 +406,7 @@ modViz.doPrediction = function (obj, model) {
 }
 
 modViz.showAccuracy = async function (obj, model) {
-  const [preds, labels] = doPrediction( obj, model );
+  const [preds, labels] = modViz.doPrediction( obj, model );
   const classAccuracy = await tfvis.metrics.perClassAccuracy(labels, preds);
   const container = {name: 'Accuracy', tab: 'Evaluation'};
   tfvis.show.perClassAccuracy(container, classAccuracy, obj.classes);
@@ -406,7 +415,7 @@ modViz.showAccuracy = async function (obj, model) {
 }
 
 modViz.showConfusion = async function (obj, model) {
-  const [preds, labels] = doPrediction( obj, model );
+  const [preds, labels] = modViz.doPrediction( obj, model );
   const confusionMatrix = await tfvis.metrics.confusionMatrix(labels, preds);
   const container = {name: 'Confusion Matrix', tab: 'Evaluation'};
   tfvis.render.confusionMatrix(container, {values: confusionMatrix, tickLabels: obj.classes});
@@ -429,6 +438,9 @@ img.onload = () => {
 
 /* -------- Testing clustering */
 /*
+
+https://github.com/PAIR-code/umap-js/tree/main
+https://plotly.com/javascript/line-and-scatter/#grouped-scatter-plot
 // Reducing dimensions
 dat = obj_cls.train_data.x.slice(0,10).map( e => e.flat(Infinity) )
 u = new UMAP({ nComponents: 128, nEpochs: 100, nNeighbors: 15})

@@ -72,7 +72,7 @@ class BuildDataset extends HTMLElement {
                                     </div>
                                     
                                     <div class="col-md-3">
-                                         <button type="button" class="btn btn-primary" style="margin-top: 32px;" onClick="trainBuilDs()" > Train </button>
+                                         <button type="button" class="btn btn-primary disab_ds" style="margin-top: 32px;" onClick="trainBuildDs()" > Train </button>
                                     </div>
                                 </div>
                                 
@@ -94,7 +94,7 @@ class BuildDataset extends HTMLElement {
                             <div class="row g-2 align-items-start"  >
                                 <div class="col-auto" id='fromImageDs' >
                                     <label class="form-label" >Choose an image file:</label>
-                                    <input class="form-control" type="file" onchange="onLoadPreview(event)" accept="image/*" id="field_cls_predict_bds" />
+                                    <input class="form-control" type="file" onchange="onLoadPreview_buildDs(event)" accept="image/*" id="field_cls_predict_bds" />
 
                                     <div id="container_predict_bds" style=" margin-top: 10; display: none; " >
                                         <img id='img_predict_bds' src="" width="200" height="200" alt="preview" />
@@ -104,7 +104,7 @@ class BuildDataset extends HTMLElement {
                                 
 
                                 <div class="col-auto">
-                                    <button type="button" class="btn btn-primary" style="margin-top: 32px;" onClick="predictFromPretrained()" > Predict </button>
+                                    <button type="button" class="btn btn-primary disab_ds" style="margin-top: 32px;" onClick="predictFromCustomModel()" > Predict </button>
                                     
                                     <div id="area_result_ds" >
                                         <h4 class="mt-4"> Result: </h4>
@@ -255,6 +255,8 @@ function getTrainData( classes_info ){
         }
         index += 1;
     }
+    
+    return dat;
 }
 
 async function trainBuildDs(){
@@ -271,7 +273,7 @@ async function trainBuildDs(){
     let elements_cl1 = document.querySelectorAll("#elements_class_1 img");
     let elements_cl2 = document.querySelectorAll("#elements_class_2 img");
     if( elements_cl1.length < 4 || elements_cl2.length < 4  ){
-        alert('The two groups must contain at least 2 animal images!');
+        alert('The two groups must contain at least 4 animal images!');
         return;
     }
     
@@ -280,28 +282,34 @@ async function trainBuildDs(){
         { 'name': name_cl2, 'elements': elements_cl2 }
     ];
     
-    tf.engine().startScope();
+    document.querySelectorAll('.disab_ds').forEach( e => e.disabled=true );
     
     obj_ds.classes = [name_cl1, name_cl2];
     obj_ds.train_data = getTrainData( classes_info );
     
-    let model = null;
-    let idModel = model_ds.value;
-    if( inModel == 'large' ){
-        modProcess.getModelImage( obj_ds );
-    }
-    
-    tfvis.visor().open();
-    obj_ds.model = await modProcess.train( obj_ds, model );
-    await modViz.showAccuracy(obj_ds, obj_ds.model, );
-    await modViz.showConfusion();
-    
-    tf.engine().endScope();
+    setTimeout( async function () {
+        tf.engine().startScope();
+        
+        let inModel = model_ds.value;
+        if( inModel == 'large' ){
+            obj_ds.model = modProcess.getModelImage( obj_ds );
+        }
+        
+        tfvis.visor().open();
+        
+        let fitted_model = await modProcess.train( obj_ds, obj_ds.model );
+        await modViz.showAccuracy( obj_ds, obj_ds.model );
+        await modViz.showConfusion( obj_ds, obj_ds.model );
+        
+        tf.engine().endScope();
+        
+        document.querySelectorAll('.disab_ds').forEach( e => e.disabled=false );
+    }, 2000);
 }
 
 /* Prediction */
 let previewUrlDs = "";
-function onLoadPreview(e) {
+function onLoadPreview_buildDs(e) {
     const image = e.target.files[0];
     if (!image) {
         document.getElementById("container_predict_bds").style.display='none';
@@ -320,7 +328,7 @@ function predictFromCustomModel(){
             tf.engine().startScope();
         
             let inn = modProcess.getVectorFromImgTag( img_predict_bds );
-            let outcome = modProcess.predictBinary( inn, obj_ds, obj_ds.model, obj_cls.dimension );
+            let outcome = modProcess.predictBinary( inn, obj_ds, obj_ds.model, obj_ds.dimension );
             
             tf.engine().endScope();
             
@@ -346,8 +354,8 @@ let init_case_buildds = () => {
     
     area_result_ds.style.display='none';
     
-    let proportions = { 'cls1': 100, 'cls2': 100 };
-    obj_ds = new AIExp( 'custom', 100, proportions, 80, 20 );
+    let proportions = { 'cls0': 100, 'cls1': 100 };
+    obj_ds = new AIExp( 'custom', 100, proportions, 60, 40 );
     obj_ds.dimension = [60, 60, 3];
     obj_ds.maxDim = 60;
     
