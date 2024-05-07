@@ -19,9 +19,9 @@
 
         <!-- Import TensorFlow.js -->
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
-        
         <!-- Import tfjs-vis -->
         <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis@1.0.2/dist/tfjs-vis.umd.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/1.33.1/plotly.min.js" integrity="sha512-V0j9LhrK9IMNdFYZqh+IqU4cjo7wdxyHNyH+L0td4HryBuZ7Oq6QxP2/CWr6TituX31+gv5PnolvERuTbz8UNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         
         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> 
         
@@ -67,11 +67,9 @@
                     <button class="nav-link" id="classification-tab" data-bs-toggle="tab" data-bs-target="#classification" type="button" role="tab" aria-controls="home" aria-selected="false"> Classification </button>
                   </li>
                   
-                  <!--
                   <li class="nav-item" role="presentation">
                     <button class="nav-link" id="clustering-tab" data-bs-toggle="tab" data-bs-target="#clustering" type="button" role="tab" aria-controls="home" aria-selected="true"> Clustering </button>
                   </li>
-                  -->
 
                   <li class="nav-item" role="presentation">
                     <button class="nav-link" id="documentation-tab" data-bs-toggle="tab" data-bs-target="#documentation" type="button" role="tab" aria-controls="documentation" aria-selected="false"> Foundation Concepts </button>
@@ -87,11 +85,9 @@
                         <classification-component />
                     </div>
                     
-                    <!--
                     <div class="tab-pane fade show" id="clustering" role="tabpanel" aria-labelledby="clustering-tab">
                         <clustering-component />
                     </div>
-                    -->
 
                     <div class="tab-pane fade show" id="documentation" role="tabpanel" aria-labelledby="documentation-tab">
                         <concepts-component />
@@ -104,16 +100,15 @@
 
                 <script src="ailearnlib.js"></script>
                 <script src="libs/umap.js"></script>
+                <script src="libs/kmeans.js"></script>
                 
                 <script src="components/exbuilddataset.js"></script>
                 <script src="components/exclassification.js"></script>
+                <script src="components/exclustering.js"></script>
                 <script src="components/concepts.js"></script>
                 
                 <script src="canvas2.js"></script>
-                
-                <!--
-                <script src="components/exclustering.js"></script>
-              -->
+              
             </div>
         </div>
 

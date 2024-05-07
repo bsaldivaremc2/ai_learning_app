@@ -308,11 +308,11 @@ let init_case_classification = () => {
         obj_cls.proportionsPerClass = proportions;
         console.log(obj_cls)
             
-        document.querySelectorAll('button').forEach( e => e.disabled=false );
+        document.querySelectorAll('.disab').forEach( e => e.disabled=false );
         notice.innerHTML = 'Model loaded';
     })
     .catch((err) => {
-      console.log( err?.response );
+      console.log( err );
     })
 
 }

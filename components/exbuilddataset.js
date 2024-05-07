@@ -364,42 +364,6 @@ let init_case_buildds = () => {
     obj_ds = new AIExp( 'custom', 100, proportions, 60, 40 );
     obj_ds.dimension = [60, 60, 3];
     obj_ds.maxDim = 60;
-    
-    /*
-    area_result_ds.style.display='none';
-    document.querySelectorAll('button').forEach( e => e.disabled=true );
-    notice.innerHTML = 'Wait... Model is loading...';
-    
-    let modelId = document.getElementById('dataset').value;
-    let totalData = parseInt(perc_n.value);
-    
-    obj_cls = new AIExp( modelId, totalData );
-    
-    if( dataset.value == 'catDogs' ){
-        fromImageDs.style.display = '';
-        fromCanvas.style.display = 'none';
-    }
-    else{
-        fromImageDs.style.display = 'none';
-        fromCanvas.style.display = '';
-    }
-    
-    obj_cls.loadModel()
-    .then( ( models ) => {
-        let dimImage = obj_cls.maxDim;
-        
-        prepareFieldsProportionClasses();
-        let proportions = getProportionClasses();
-        obj_cls.proportionsPerClass = proportions;
-        console.log(obj_cls)
-            
-        document.querySelectorAll('button').forEach( e => e.disabled=false );
-        notice.innerHTML = 'Model loaded';
-    })
-    .catch((err) => {
-      console.log( err?.response );
-    })
-    */
 
 }
 init_case_buildds()

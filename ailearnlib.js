@@ -2,7 +2,7 @@
 /* Loading data */
 
 class AIExp {
-  constructor(idModel, totalData=null, proportionsPerClass=null, train_size_perc=70, test_size_perc=30 ){
+  constructor(idModel, totalData=100, proportionsPerClass=null, train_size_perc=70, test_size_perc=30 ){
     this.idModel = idModel;
     this.dimension = [];
     this.maxDim = 0;
@@ -14,6 +14,7 @@ class AIExp {
     this.test_size_perc = test_size_perc;
     this.totalData = totalData;
     this.proportionsPerClass = proportionsPerClass;
+    this.embedding_size = 256;
   }
 
   async loadModel() {
@@ -34,8 +35,9 @@ class AIExp {
         inModel = { url: this.idModel, layer: null };
     }
     
+    let modelData = null;
     if( inModel.url != 'custom' ){
-        let modelData = await modLoad.loadModel( inModel );
+        modelData = await modLoad.loadModel( inModel );
         this.model = modelData[0];
         this.pretrained = modelData[1];
         this.train_data = modelData[2];
@@ -388,6 +390,44 @@ modProcess.train = async function(obj, model) {
   });
 }
 
+modProcess.embedReduceFeaturesUmap = function ( obj ) {
+  let dim = obj.embedding_size;
+  let neighbors = 20;
+  
+  //dat = obj_cls.train_data.x.slice(0,10).map( e => e.flat(Infinity) )
+  let dat = obj.train_data.x.map( e => e.flat(Infinity) )
+  let u = new UMAP({ nComponents: dim, nEpochs: 100, nNeighbors: neighbors })
+  let embedding = u.fit(dat);
+  
+  return embedding;
+}
+
+modProcess.doClustering = async function (obj, embedding) {
+  let real = obj.train_data.y;
+  let classLabels = obj.train_data.class;
+  let emb = tf.tensor( embedding );
+  
+  let epochs = 30;
+  let k = obj.classes.length;
+  
+  let kmeans = new KMeans( k, epochs ); // binary
+  let predictions = await kmeans.TrainAsync(
+		emb,
+		// Called At End of Every Iteration
+		// This function is Asynchronous
+		async(iter, centroid, preds) => {
+			console.log("===");
+			console.log("Iteration Count", iter);
+			console.log("Centroid ", await centroid.array());
+			console.log("Prediction ", await preds.array());
+			console.log("===");
+			// You could instead use TFVIS for Plotting Here
+		}
+	);
+	
+	return [ predictions.dataSync(), real, classLabels ];
+}
+
 let modViz = {}
 
 modViz.doPrediction = function (obj, model) {
@@ -423,6 +463,7 @@ modViz.showConfusion = async function (obj, model) {
   labels.dispose();
 }
 
+
 /* -------- Testing clustering */
 /*
 i='http://127.0.0.7/ai_learning_app/imgs/confusion_matrix.png'
@@ -441,8 +482,9 @@ img.onload = () => {
 
 https://github.com/PAIR-code/umap-js/tree/main
 https://plotly.com/javascript/line-and-scatter/#grouped-scatter-plot
+
 // Reducing dimensions
-dat = obj_cls.train_data.x.slice(0,10).map( e => e.flat(Infinity) )
+dat = obj_cls.train_data.x.slice(0,20).map( e => e.flat(Infinity) )
 u = new UMAP({ nComponents: 128, nEpochs: 100, nNeighbors: 15})
 embedding = u.fit(dat);
 
