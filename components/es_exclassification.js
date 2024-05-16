@@ -322,4 +322,4 @@ let init_case_clasificacion = () => {
     })
 
 }
-init_case_clasificacion()
+//init_case_clasificacion()

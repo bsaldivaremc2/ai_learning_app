@@ -192,6 +192,7 @@ return array;
 
 function loadExamplesClasses(){
     let available_classes = { "bird": 18, "lion": 18, "cat": 18, "dog": 18 };
+    let tclasses = { "bird": "Pájaro", "lion": "León", "cat": "Gato", "dog": "Perro" };
     
     let htmls = "";
     for( let c of Object.keys(available_classes) ){
@@ -216,7 +217,7 @@ function loadExamplesClasses(){
         // <div class="col-auto" id="cls_${c}" >
         htmls += `
             <div class="col-md-6" id="cls_${c}" >
-                <h5> ${ _capitalize(c) } </h5>
+                <h5> ${ tclasses[c] } </h5>
                 <div class="col-md-12" id="content_${c}" >
                     ${innerImgs}
                 </div>
