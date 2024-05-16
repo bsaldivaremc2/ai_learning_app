@@ -51,7 +51,7 @@ connectedCallback() {
 
                             <div class="row" >
                                 <div class="col-md-12"  >
-                                    <button type="button" class="btn btn-primary " style="margin-top: 32px;" onClick="init_case_classification()" > Inicializar y Cargar el Modelo </button>
+                                    <button type="button" class="btn btn-primary " style="margin-top: 32px;" onClick="init_case_clasificacion()" > Inicializar y Cargar el Modelo </button>
                                 </div>
                             </div>    
                             
