@@ -188,7 +188,7 @@ connectedCallback() {
     `;
 }
 }
-customElements.define('clasificacion-componente', Clasificacion);
+customElements.define('classification-component', Clasificacion);
 
 function treatProportion(){
 let cdog = parseInt( document.getElementById('perc_dog').value );
