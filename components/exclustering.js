@@ -20,7 +20,7 @@ class Clustering extends HTMLElement {
                 </div>
             </div>    
             
-            <h5>Choose the dataset: </h5>
+            <h5 class='mt-3' >Choose the dataset: </h5>
             <div class="row g-2 align-items-center">
               <div class="col-auto">
                   <label class="form-label" > Dataset:</label>

@@ -20,7 +20,7 @@ connectedCallback() {
                 </div>
             </div>    
             
-            <h5>Elige el conjunto de datos: </h5>
+            <h5  class='mt-3' >Elige el conjunto de datos: </h5>
             <div class="row g-2 align-items-center">
             <div class="col-auto">
                 <label class="form-label" > Conjunto de datos:</label>
