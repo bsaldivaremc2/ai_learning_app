@@ -67,7 +67,7 @@ const pretrainedModel = {
 const catDogs = {
   //url: "models/catxdogs/ml-classifier-dogs-cats.json",
   url: "https://raw.githubusercontent.com/dkreider/tensorflowjs-cat-vs-dog/master/trained-model/model.json",
-  url_data: "100_features_catsxdogs.json",
+  url_data: "/ai_learning_app/100_features_catsxdogs.json",
   layer: null,
   dimensionVec: [150, 150, 3],
   classNames: ["Cat", "Dog"]
@@ -79,7 +79,7 @@ const digits = {
   // options: digitrecognizercnn or digitrecognizermlp
   url: 'https://gogulilango.com/models/<template>/model.json',
   modelType: 'digitrecognizercnn',
-  url_data: "100_features_digits.json",
+  url_data: "/ai_learning_app/100_features_digits.json",
   layer: null,
   dimensionVec: [28, 28, 1],
   classNames: ['Zero', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine']
