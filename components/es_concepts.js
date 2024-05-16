@@ -35,7 +35,7 @@ class Concepts extends HTMLElement {
                   En la tabla, cada celda tiene un nombre basado en la etiqueta, en este caso, "gato". Los gatos son los ejemplos positivos y los perros son los ejemplos negativos. Los "verdaderos positivos" (VP) son imágenes etiquetadas y predichas como gatos, y los "verdaderos negativos" (VN) son imágenes etiquetadas y predichas como perros. Los "falsos positivos" (FP) son imágenes etiquetadas como perros pero predichas como gatos, y los "falsos negativos" (FN) son imágenes etiquetadas como gatos pero predichas como perros.
               
                   <div class="col-md-12 text-center" >
-                      <img src='imgs/confusion_matrix.png'  />
+                      <img src='/ai_learning_app/imgs/confusion_matrix.png'  />
                   </div>
                   
                   <ul> Basándonos en estas cuatro variables (VP, VN, FP, FN), podemos calcular tres métricas diferentes:

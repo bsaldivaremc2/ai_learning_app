@@ -26,7 +26,7 @@ class Concepts extends HTMLElement {
             <div class="row" >
                 Let's focus and apply to the cats x dogs classification problem. We have a lot of images that we know which animal is in them. Then we built a model and we evaluate the right and correct answers we got this table below. From 180 pictures, it said that that they belong to the correct animal in 150 of them. When we do this matrix, each cell has a name based on a target class, in this case the target class was cat, this is what we call the positive, so the dogs are the negative examples of the target cat. This is the reason why the green ones correspond to true positives (TP) (labeled and predicted as cats) and true negatives (TN) (labeled and predicted as dogs). False positive (FP) are those that are labeled as dogs but the model predicted as cats, the same manner the false negatives (FN) are those predicted as dogs but indeed the picture was a cat.
                 <div class="col-md-12 text-center" >
-                    <img src='imgs/confusion_matrix.png'  />
+                    <img src='/ai_learning_app/imgs/confusion_matrix.png'  />
                 </div>
                 
                 <ul> Based on these four variables (TP, TN, FP, FN), we can calculate the three distinct metrics:
