@@ -55,7 +55,7 @@ connectedCallback() {
                                 </div>
                             </div>    
                             
-                            <div class="row g-2 align-items-start">
+                            <div class="row g-2 align-items-start mt-3">
                                 <div class="col-auto" id='fromImage' >
                                     <label class="form-label" >Elige un archivo de imagen:</label>
                                     <input class="form-control" type="file" onchange="onLoadPreview(event)" accept="image/*" id="field_cls_predict" />
@@ -81,7 +81,7 @@ connectedCallback() {
                                 
 
                                 <div class="col-auto">
-                                    <button type="button" class="btn btn-primary disab" style="margin-top: 32px;" onClick="predictFromPretrained()" > Predecir </button>
+                                    <button type="button" id='action' class="btn btn-primary disab" style="margin-top: 32px;" onClick="predictFromPretrained()" > Predecir </button>
                                     <div id="area_result" style="display: none;" >
                                         <h4 class="mt-4"> Resultado: </h4>
 
@@ -214,29 +214,33 @@ let input = document.getElementById('field_cls_predict');
 if( input.files.length > 0 || dataset.value == 'digits' ){
     document.querySelectorAll('.disab').forEach( e => e.disabled=true );
     area_result.style.display='none';
+    action.innerHTML = 'Predecindo ...';
     
     tf.engine().startScope();
     
-    let inn = null;
-    
-    let resultado = '';
-    if( obj_cls.classes.length == 2 ){
-        inn = modProcess.getVectorFromImgTag( img_predict );
-        resultado = modProcess.predictBinary( inn, obj_cls, obj_cls.model, obj_cls.dimension );
-    }
-    else {
-        inn = modProcess.getVectorFromCanvas();
-        resultado = modProcess.predictMulti( inn, obj_cls, obj_cls.model, obj_cls.dimension );
-    }
-    tf.engine().endScope();
-    
-    if( dataset.value == 'catDogs' ){
-        resultado = ( resultado == 'Dog') ? '🐶' : '😸' ;
-    }
-    
-    document.getElementById('result_cls').innerHTML = `<span> ${resultado} </span>`;
-    area_result.style.display='';
-    document.querySelectorAll('.disab').forEach( e => e.disabled=false );
+    setTimeout( function() {
+        let inn = null;
+        
+        let resultado = '';
+        if( obj_cls.classes.length == 2 ){
+            inn = modProcess.getVectorFromImgTag( img_predict );
+            resultado = modProcess.predictBinary( inn, obj_cls, obj_cls.model, obj_cls.dimension );
+        }
+        else {
+            inn = modProcess.getVectorFromCanvas();
+            resultado = modProcess.predictMulti( inn, obj_cls, obj_cls.model, obj_cls.dimension );
+        }
+        tf.engine().endScope();
+        
+        if( dataset.value == 'catDogs' ){
+            resultado = ( resultado == 'Dog') ? '🐶' : '😸' ;
+        }
+        
+        document.getElementById('result_cls').innerHTML = `<span> ${resultado} </span>`;
+        area_result.style.display='';
+        document.querySelectorAll('.disab').forEach( e => e.disabled=false );
+        action.innerHTML = 'Predecir';
+    }, 2000);
 }
 else{
     alert('No hay ninguna imagen seleccionada');

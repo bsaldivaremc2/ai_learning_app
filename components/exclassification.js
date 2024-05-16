@@ -82,7 +82,7 @@ class Classification extends HTMLElement {
                                 
 
                                 <div class="col-auto">
-                                    <button type="button" class="btn btn-primary disab" style="margin-top: 32px;" onClick="predictFromPretrained()" > Predict </button>
+                                    <button type="button" id='action' class="btn btn-primary disab" style="margin-top: 32px;" onClick="predictFromPretrained()" > Predict </button>
                                     <div id="area_result" style="display: none;" >
                                         <h4 class="mt-4"> Result: </h4>
 
@@ -215,29 +215,33 @@ function predictFromPretrained() {
   if( input.files.length > 0 || dataset.value == 'digits' ){
     document.querySelectorAll('.disab').forEach( e => e.disabled=true );
     area_result.style.display='none';
+    action.innerHTML = 'Predicting ...';
     
     tf.engine().startScope();
     
-    let inn = null;
-    
-    let outcome = '';
-    if( obj_cls.classes.length == 2 ){
-        inn = modProcess.getVectorFromImgTag( img_predict );
-        outcome = modProcess.predictBinary( inn, obj_cls, obj_cls.model, obj_cls.dimension );
-    }
-    else {
-        inn = modProcess.getVectorFromCanvas();
-        outcome = modProcess.predictMulti( inn, obj_cls, obj_cls.model, obj_cls.dimension );
-    }
-    tf.engine().endScope();
-    
-    if( dataset.value == 'catDogs' ){
-        outcome = ( outcome == 'Dog') ? '🐶' : '😸' ;
-    }
-    
-    document.getElementById('result_cls').innerHTML = `<span> ${outcome} </span>`;
-    area_result.style.display='';
-    document.querySelectorAll('.disab').forEach( e => e.disabled=false );
+    setTimeout( function() {
+        let inn = null;
+        
+        let resultado = '';
+        if( obj_cls.classes.length == 2 ){
+            inn = modProcess.getVectorFromImgTag( img_predict );
+            resultado = modProcess.predictBinary( inn, obj_cls, obj_cls.model, obj_cls.dimension );
+        }
+        else {
+            inn = modProcess.getVectorFromCanvas();
+            resultado = modProcess.predictMulti( inn, obj_cls, obj_cls.model, obj_cls.dimension );
+        }
+        tf.engine().endScope();
+        
+        if( dataset.value == 'catDogs' ){
+            resultado = ( resultado == 'Dog') ? '🐶' : '😸' ;
+        }
+        
+        document.getElementById('result_cls').innerHTML = `<span> ${resultado} </span>`;
+        area_result.style.display='';
+        document.querySelectorAll('.disab').forEach( e => e.disabled=false );
+        action.innerHTML = 'Predict';
+    }, 2000);
   }
   else{
     alert('There is no image in selection');
