@@ -83,7 +83,7 @@ class Classification extends HTMLElement {
 
                                 <div class="col-auto">
                                     <button type="button" class="btn btn-primary disab" style="margin-top: 32px;" onClick="predictFromPretrained()" > Predict </button>
-                                    <div id="area_result" >
+                                    <div id="area_result" style="display: none;" >
                                         <h4 class="mt-4"> Result: </h4>
 
                                         <div id="result_cls" style="font-size: 50; padding: 15px: border: 2px solid blue;" > </div>
@@ -213,6 +213,9 @@ function onLoadPreview(e) {
 function predictFromPretrained() {
   let input = document.getElementById('field_cls_predict');
   if( input.files.length > 0 || dataset.value == 'digits' ){
+    document.querySelectorAll('.disab').forEach( e => e.disabled=true );
+    area_result.style.display='none';
+    
     tf.engine().startScope();
     
     let inn = null;
@@ -234,6 +237,7 @@ function predictFromPretrained() {
     
     document.getElementById('result_cls').innerHTML = `<span> ${outcome} </span>`;
     area_result.style.display='';
+    document.querySelectorAll('.disab').forEach( e => e.disabled=false );
   }
   else{
     alert('There is no image in selection');
