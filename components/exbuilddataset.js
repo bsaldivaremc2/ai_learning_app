@@ -195,7 +195,7 @@ function loadExamplesClasses(){
     
     let htmls = "";
     for( let c of Object.keys(available_classes) ){
-        let path = `examples/expSelfBuildData/${c}`;
+        let path = `../examples/expSelfBuildData/${c}`;
         let prefix = c[0];
         let setList = [];
         for ( let i=1; i <= available_classes[c]; i++ ){
