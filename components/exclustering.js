@@ -14,6 +14,12 @@ class Clustering extends HTMLElement {
                In this part of the app you can explore how a clustering method behaves to group items from datasets that are originally designed for classification tasks, in the same two context of datasets as the classification tab of this app: (i) Model to classify if image has a dog or a cat; (ii) Model to classify if handwritten digit is in the range 0 to 9. The original data for the problem (i) was derived from <a href='https://download.microsoft.com/download/3/E/1/3E1C3F21-ECDB-4869-8368-6DEBA77B919F/kagglecatsanddogs_5340.zip' target='_blank' > here </a>, and the data for the digits was downloaded <a href='https://drive.google.com/file/d/11ZiNnV3YtpZ7d9afHZg0rtDRrmhha-1E/view' target='_blank' > here </a>.
             </p>
 
+            <div class="row" >
+                <div class="col-md-12"  >
+                    <button type="button" class="btn btn-primary " style="margin-top: 32px;" onClick="init_case_clustering()" > Initialize and Load Model </button>
+                </div>
+            </div>    
+            
             <h5>Choose the dataset: </h5>
             <div class="row g-2 align-items-center">
               <div class="col-auto">
@@ -182,5 +188,5 @@ let init_case_clustering = () => {
     })
 
 }
-init_case_clustering()
+//init_case_clustering()
 

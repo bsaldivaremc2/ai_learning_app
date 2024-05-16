@@ -49,6 +49,12 @@ connectedCallback() {
                             En esta sección, puedes elegir cualquier imagen y verificar la clasificación según el modelo que elegiste previamente. Ten en cuenta que los modelos solo saben reconocer objetos similares a los que se les presentaron durante el entrenamiento. Será difícil para el modelo de gatos x perros manejar imágenes fuera de este contexto (una imagen de un número), tan difícil como presentar una imagen de un perro para predecir con el modelo que clasifica dígitos escritos a mano. El modelo entrenado para el problema de gatos x perros se obtuvo de <a href='https://github.com/dkreider/tensorflowjs-cat-vs-dog' target='_blank' > aquí </a> mientras que el modelo para reconocimiento de dígitos se obtuvo de <a href='https://gogulilango.com/software/digit-recognizer-tf-js' target='_blank' > aquí </a>
                             </p>
 
+                            <div class="row" >
+                                <div class="col-md-12"  >
+                                    <button type="button" class="btn btn-primary " style="margin-top: 32px;" onClick="init_case_classification()" > Inicializar y Cargar el Modelo </button>
+                                </div>
+                            </div>    
+                            
                             <div class="row g-2 align-items-start">
                                 <div class="col-auto" id='fromImage' >
                                     <label class="form-label" >Elige un archivo de imagen:</label>

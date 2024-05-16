@@ -20,7 +20,7 @@ class Classification extends HTMLElement {
                   <label class="form-label" > Dataset:</label>
                   <select id="dataset" class="form-control " onChange="init_case_classification()"  >
                       <option value="catDogs" > Cats x Dogs </option>
-                      <option value="digits" > Numbes (0-9) </option>
+                      <option value="digits" > Numbers (0-9) </option>
                       <!--<option value="custom" > Custom Dataset </option>-->
                   </select>
               </div>
@@ -48,8 +48,15 @@ class Classification extends HTMLElement {
                             <p>
                               In this section, you can choose any image and check the classification according to the model you chose previously. Keep in mind that the models only know how to recognize similar objects of those that were presented to it during the training. It will be hard for the model of cats x dogs to deal with images out of this context (a picture of a number), so hard as presenting a picture of a dog to predict for the model that classify handwritten digits. The trained model for the problem cats x dogs was derived from <a href='https://github.com/dkreider/tensorflowjs-cat-vs-dog' target='_blank' > here </a> while th emodel for digits recognition was retrieved from was derived from <a href='https://gogulilango.com/software/digit-recognizer-tf-js' target='_blank' > here </a>
                             </p>
-
-                            <div class="row g-2 align-items-start">
+                            
+                            <div class="row" >
+                                <div class="col-md-12"  >
+                                    <button type="button" class="btn btn-primary " style="margin-top: 32px;" onClick="init_case_classification()" > Initialize and Load Model </button>
+                                </div>
+                            </div>    
+                            
+                            <div class="row g-2 align-items-start mt-3">
+                                
                                 <div class="col-auto" id='fromImage' >
                                     <label class="form-label" >Choose an image file:</label>
                                     <input class="form-control" type="file" onchange="onLoadPreview(event)" accept="image/*" id="field_cls_predict" />
@@ -316,5 +323,5 @@ let init_case_classification = () => {
     })
 
 }
-init_case_classification()
+//init_case_classification()
 

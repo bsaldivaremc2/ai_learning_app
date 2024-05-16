@@ -14,6 +14,12 @@ connectedCallback() {
                 En esta parte de la app puedes explorar cómo se comporta un método de clustering para agrupar elementos de conjuntos de datos que están diseñados originalmente para tareas de clasificación, en los mismos dos contextos de conjuntos de datos que la pestaña de clasificación de esta app: (i) Modelo para clasificar si la imagen tiene un perro o un gato; (ii) Modelo para clasificar si un dígito escrito a mano está en el rango de 0 a 9. Los datos originales para el problema (i) se obtuvieron de <a href='https://download.microsoft.com/download/3/E/1/3E1C3F21-ECDB-4869-8368-6DEBA77B919F/kagglecatsanddogs_5340.zip' target='_blank' > aquí </a>, y los datos para los dígitos se descargaron <a href='https://drive.google.com/file/d/11ZiNnV3YtpZ7d9afHZg0rtDRrmhha-1E/view' target='_blank' > aquí </a>.
             </p>
 
+            <div class="row" >
+                <div class="col-md-12"  >
+                    <button type="button" class="btn btn-primary " style="margin-top: 32px;" onClick="init_case_clustering()" > Inicializar y Cargar el Modelo  </button>
+                </div>
+            </div>    
+            
             <h5>Elige el conjunto de datos: </h5>
             <div class="row g-2 align-items-center">
             <div class="col-auto">
