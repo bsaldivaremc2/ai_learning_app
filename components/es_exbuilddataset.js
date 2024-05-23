@@ -241,19 +241,23 @@ function remove( obj ){
 }
 
 /* Funciones de transformación y entrenamiento */
-function getTrainData( classes_info ){
+function getTrainData( classes_info, augmentation=false, factor=1 ){
     let dat = { 'x': [], 'y': [], 'class': [] };
     
+    let times = 1;
+    if( augmentation ){
+        times = factor;
+    }
+    
+    let info = null;
     let index = 0;
     for( let clf of classes_info  ){
         for( let el of clf.elements ){
-            dat.y.push( index );
-            dat.class.push( clf.name );
-            
-            let img = new Image();
-            img.src = el.src;
-            img.onload = () => {
-            dat.x.push( tf.browser.fromPixels( img ) );
+            info = tf.browser.fromPixels( el );
+            for( let i=0; i<factor; i++ ){
+                dat.x.push( info );
+                dat.y.push( index );
+                dat.class.push( clf.name );
             }
         }
         index += 1;
@@ -288,7 +292,9 @@ async function trainBuildDs(){
     document.querySelectorAll('.disab_ds').forEach( e => e.disabled=true );
     
     obj_ds.classes = [name_cl1, name_cl2];
-    obj_ds.train_data = getTrainData( classes_info );
+    let augmentation = true;
+    let factor = 20;
+    obj_ds.train_data = getTrainData( classes_info, augmentation, factor );
     notice_ds.innerHTML = 'Transformando datos ...';
     
     setTimeout( async function () {
