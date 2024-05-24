@@ -118,7 +118,7 @@ modLoad.loadData = async function ( url ) {
 }
 
 /* modProcess - Handle training and prediction */
-let modProcess = { 'epochs':  20 };
+let modProcess = { 'epochs':  50 };
 
 modProcess.getVectorFromCanvas = () => {
 	let image = boundingBox();
@@ -295,7 +295,6 @@ modProcess.filterData = function( obj ){
     
     i+=1;
   }
-  
   let allx_train = [];
   let ally_train = [];
   let allx_test = [];
