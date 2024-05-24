@@ -367,7 +367,7 @@ let init_case_buildds = () => {
     area_result_ds.style.display='none';
     
     let proportions = { 'cls0': 100, 'cls1': 100 };
-    obj_ds = new AIExp( 'custom', 100, proportions, 60, 40 );
+    obj_ds = new AIExp( 'custom', 100, proportions, 70, 30 );
     obj_ds.dimension = [60, 60, 3];
     obj_ds.maxDim = 60;
 
