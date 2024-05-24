@@ -63,7 +63,7 @@ connectedCallback() {
                                 </div>
                                 
                                 <div class="col-md-12 mt-3 g-2" >
-                                    <div class="col-md-3">
+                                    <div class="col-md-3" style="display: none" >
                                         <label class="form-label" > Tria un Model: </label>
                                         <select id="model_ds" class="form-control " >
                                             <option value="small" > Baixa Complexitat </option>
@@ -241,7 +241,7 @@ function remove( obj ){
     }
 }
 
-/* Funciones de transformación y entrenamiento */
+/* Transformation and training functions */
 function getTrainData( classes_info, augmentation=false, factor=1 ){
     let dat = { 'x': [], 'y': [], 'class': [] };
     

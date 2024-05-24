@@ -62,7 +62,7 @@ class BuildDataset extends HTMLElement {
                                 </div>
                                 
                                 <div class="col-md-12 mt-3 g-2" >
-                                    <div class="col-md-3">
+                                    <div class="col-md-3" style="display: none" >
                                         <label class="form-label" > Choose a Model: </label>
                                         <select id="model_ds" class="form-control " >
                                             <option value="small" > Low Complexity </option>
