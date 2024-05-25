@@ -121,18 +121,18 @@ modLoad.loadData = async function ( url ) {
 let modProcess = { 'epochs':  50 };
 
 modProcess.getVectorFromCanvas = () => {
-	let image = boundingBox();
-	let  pixels = tf.browser.fromPixels( image );
+  let image = boundingBox();
+  let  pixels = tf.browser.fromPixels( image );
     return pixels;
 }
 
 modProcess.predictMulti = (pixels, obj, model, dimension) => {
-	/*
-	let tensor = tf.tensor(r, dimension, 'float32');
-	tensor = tf.expandDims(tensor, 0);
-	*/
-	
-	let maxd = Math.max.apply(null, dimension);
+  /*
+  let tensor = tf.tensor(r, dimension, 'float32');
+  tensor = tf.expandDims(tensor, 0);
+  */
+  
+  let maxd = Math.max.apply(null, dimension);
     let image = pixels.resizeNearestNeighbor( [maxd, maxd] );
     //image = image.mean(2).expandDims().toFloat().div(255.0);
     
@@ -153,7 +153,7 @@ modProcess.predictMulti = (pixels, obj, model, dimension) => {
         .div(255.0);
     }
         
-	let modelPrediction = null;
+  let modelPrediction = null;
     modelPrediction = model.predict( image );
     
     let results = Array.from( modelPrediction.dataSync() );
@@ -188,29 +188,8 @@ modProcess.predictBinary = function ( pixels, obj, model, dimension ) {
   return results;
 }
 
-// Pre-trained model selection (choose one)
-const BPRETRAINED_MODEL = {
-  name: 'MobileNet',
-  url: 'https://storage.googleapis.com/tfjs-models/pretrained_models/mobilenet_v2/mobilenet_v2_100_224/model.json'
-  // OR
-  // name: 'VGG19',
-  // url: 'https://storage.googleapis.com/tfjs-models/pretrained_models/vgg19/model.json'
-};
-
-async function BloadModel() {
-  const model = await tf.loadLayersModel(BPRETRAINED_MODEL.url);
-
-  // Freeze the pre-trained model layers (optional, can be adjusted)
-  for (const layer of model.layers) {
-    layer.trainable = false;
-  }
-
-  return model;
-}
-
 modProcess.getModelImage = function(obj) {
-  
-  //const model = tf.sequential();
+  const model = tf.sequential();
 
   // Parameters to adjust according to dataset
   const IMAGE_WIDTH = obj.maxDim;
@@ -221,7 +200,6 @@ modProcess.getModelImage = function(obj) {
   if( NUM_OUTPUT_CLASSES > 2){
     loss_function = 'categoricalCrossentropy';
   }
-  /*
   
   // In the first layer of our convolutional neural network we have
   // to specify the input shape. Then we specify some parameters for
@@ -262,23 +240,10 @@ modProcess.getModelImage = function(obj) {
     kernelInitializer: 'varianceScaling',
     activation: 'softmax'
   }));
-  */
-
-  const model = await BloadModel();
-
-    // Add new layers for your custom classification task
-  const newLayers = [
-      // Define your new layers (e.g., Dense, Dropout)
-      tf.layers.Flatten(),
-      tf.layers.Dense({ units: 1024, activation: 'relu' }), // Adjust units and activation
-      tf.layers.Dropout(0.5),
-      tf.layers.Dense({ units: 2, activation: 'softmax' }) // Replace NUM_CLASSES with your output class count
-    ];
-  model.add(newLayers);
 
   // Choose an optimizer, loss function and accuracy metric,
   // then compile and return the model
-  const optimizer = tf.train.adam();
+  const optimizer = tf.train.adam(0.001);
   model.compile({
     optimizer: optimizer,
     loss: loss_function,
@@ -446,20 +411,20 @@ modProcess.doClustering = async function (obj, embedding) {
   
   let kmeans = new KMeans( k, epochs ); // binary
   let predictions = await kmeans.TrainAsync(
-		emb,
-		// Called At End of Every Iteration
-		// This function is Asynchronous
-		async(iter, centroid, preds) => {
-			console.log("===");
-			console.log("Iteration Count", iter);
-			console.log("Centroid ", await centroid.array());
-			console.log("Prediction ", await preds.array());
-			console.log("===");
-			// You could instead use TFVIS for Plotting Here
-		}
-	);
-	
-	return [ predictions.dataSync(), real, classLabels ];
+    emb,
+    // Called At End of Every Iteration
+    // This function is Asynchronous
+    async(iter, centroid, preds) => {
+      console.log("===");
+      console.log("Iteration Count", iter);
+      console.log("Centroid ", await centroid.array());
+      console.log("Prediction ", await preds.array());
+      console.log("===");
+      // You could instead use TFVIS for Plotting Here
+    }
+  );
+  
+  return [ predictions.dataSync(), real, classLabels ];
 }
 
 let modViz = {}
@@ -525,20 +490,19 @@ embedding = u.fit(dat);
 // Entering kmeans
 kmeans = new KMeans( 2, 30 ); // binary
 predictions = await kmeans.TrainAsync(
-		embedding,
-		// Called At End of Every Iteration
-		// This function is Asynchronous
-		async(iter, centroid, preds)=>{
-			console.log("===");
-			console.log("Iteration Count", iter);
-			console.log("Centroid ", await centroid.array());
-			console.log("Prediction ", await preds.array());
-			console.log("===");
-			// You could instead use TFVIS for Plotting Here
-		}
-	);
-	
+    embedding,
+    // Called At End of Every Iteration
+    // This function is Asynchronous
+    async(iter, centroid, preds)=>{
+      console.log("===");
+      console.log("Iteration Count", iter);
+      console.log("Centroid ", await centroid.array());
+      console.log("Prediction ", await preds.array());
+      console.log("===");
+      // You could instead use TFVIS for Plotting Here
+    }
+  );
+  
 
 */
-
 
